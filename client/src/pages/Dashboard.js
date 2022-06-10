@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import jwt_decode from "jwt-decode"
 import { useNavigate } from 'react-router-dom'
+import Axios from 'axios'
 
 
 const Dashboard = () => {
@@ -9,6 +10,8 @@ const Dashboard = () => {
     const [user_id, setUserId] = useState()
     const [username, setUsername] = useState()
     const [myPost, setMyPost] = useState('')
+    const [listOfPosts, setListOfPosts] = useState([])
+    // const [listOfUsers, setListOfUsers] = useState([])
 
     async function welcomeMsg() {
         const req = await fetch('http://localhost:3001/api/welcome', {
@@ -38,6 +41,16 @@ const Dashboard = () => {
                 welcomeMsg();
             }
         }
+
+        Axios.get("http://localhost:3001/api/readPost")
+        .then((response) => {
+
+             console.log(response.data);
+
+        }).catch(() => {
+            console.log("err")
+        });
+
     }, [])
 
 
@@ -56,7 +69,6 @@ const Dashboard = () => {
         })
 
         const data = await response.json()
-
     }
 
     return (
@@ -70,8 +82,9 @@ const Dashboard = () => {
                 />
                 <input type="submit" value="Post it"/>
             </form>
+            
         </div>
     )
 }
 
-export default Dashboard
+export default Dashboard;

@@ -7,7 +7,6 @@ const postModel = require('./models/Posts');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
 app.use(cors());
 app.use(express.json());
 
@@ -23,7 +22,7 @@ app.post('/api/register', async(req, res) => {
         })
         res.json({ status: 'ok' })        
     } catch (err) {
-        res.json({ status: 'error', error: 'Duplicate email'})
+        res.json({ status: 'error', error: 'Duplicate email' })
     }
 });
 
@@ -79,6 +78,34 @@ app.post('/api/addPost', async(req, res) => {
         res.json({ status: 'error', error: 'Could not add post !!'  })
     }
 })
+
+// app.get('/api/readPost', async(req, res) => {
+//     postModel.find({}, (err, result) => {
+//         if(err){
+//             res.send(err);
+//         } else {
+//             console.log(result);
+//             res.send(result);
+//         }
+//     });
+// });
+
+app.get('/api/readPost', function(req, res, next){
+    postModel
+    .find()
+    .populate('owner')    
+    .exec()
+.then(data=>{
+    res.status(200).json({
+        message: "OK",
+        results:data
+    });
+})
+.catch(err=>{
+    res.json(err);
+})
+
+});
 
 app.listen(3001, ()=> {
     console.log("Server connected at Port 3001..")
